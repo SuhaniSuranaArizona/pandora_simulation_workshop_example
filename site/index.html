@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The problem: a spotted star fools a transit</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+  <span class="brand">Stellar contamination and Pandora</span>
+  <nav aria-label="Pages"><ul>
+    <li><a href="index.html" aria-current="page">1 The problem</a></li>
+    <li><a href="star.html">2 Play with the star</a></li>
+    <li><a href="pandora.html">3 Pandora's trick</a></li>
+    <li><a href="about.html">4 About this model</a></li>
+  </ul></nav>
+  <button type="button" class="ghost proj" id="proj" aria-pressed="false">Projector view</button>
+</div></header>
+
+<main class="wrap" id="main">
+  <h1>A spotted star fools a transit measurement</h1>
+  <p class="lede">When a planet crosses its star, the dip in light tells us the planet's size. But the star is not a uniform disk: cool spots are dimmer than the rest. Even when the planet never touches a spot, the spots change how deep the dip looks. This is the <strong>transit light source effect</strong>.</p>
+
+  <div class="grid-2">
+    <div class="sky"><canvas id="star" width="241" height="241" role="img" aria-label="The star with its spots, and the planet crossing it"></canvas></div>
+    <div class="card">
+      <canvas id="lc" class="chart" role="img" aria-label="Light curves of the transit with and without spots"></canvas>
+      <div class="controls">
+        <button id="play" class="primary" type="button">Pause</button>
+        <label>Time <input id="time" type="range" min="-1" max="1" step="0.001" value="-1" aria-label="Time through the transit"></label>
+        <span class="seg" role="group" aria-label="Star type">
+          <button type="button" data-star="M" aria-pressed="true">M dwarf</button>
+          <button type="button" data-star="K" aria-pressed="false">K dwarf</button>
+        </span>
+        <label>Spot size <input id="size" type="range" min="0" max="2" step="0.05" value="1.5" aria-label="Spot size, as a multiple of the default"><output id="sizeOut">1.5×</output></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-row" style="margin-top:16px" aria-live="polite">
+    <div class="stat"><div class="k">Dip with no spots (the truth)</div><div class="v" id="dClean">–</div><div class="n">at 0.6 µm</div></div>
+    <div class="stat"><div class="k">Dip we would measure</div><div class="v" id="dSpot">–</div><div class="n">planet avoids every spot</div></div>
+    <div class="stat"><div class="k">Planet looks too big by</div><div class="v" id="dOver">–</div><div class="n">in depth, so about half that in radius</div></div>
+  </div>
+
+  <div class="card">
+    <h2>What to notice</h2>
+    <ol>
+      <li>The dashed curve is the same transit of a spotless star. The solid curve is the spotted star. The planet is identical in both.</li>
+      <li>The planet blocks only clean surface, but the spots have already made the whole star dimmer. The planet's shadow is the same brightness and now a larger fraction of what is left, so the dip looks deeper.</li>
+      <li>Drag <em>Spot size</em> to zero and the two curves meet. The M and K presets give nearly the same error for the same spots, because what matters is how much dimmer the spots are than the star, and that is similar for these two. </li>
+    </ol>
+  </div>
+
+  <p class="note">Illustrative model: simplified stellar spectra (blackbodies), round-number temperatures, and a made-up planet. It shows the trend, not a prediction for any real star.</p>
+  <nav class="pager" aria-label="Previous and next page">
+    <span class="spacer"></span>
+    <a href="star.html" rel="next">2 Play with the star →</a>
+  </nav>
+</main>
+<footer class="site"><div class="wrap">Transit light source effect explainer, conceptual version.</div></footer>
+
+<script src="js/model.js"></script>
+<script src="js/presets.js"></script>
+<script src="js/plots.js"></script>
+<script src="js/starview.js"></script>
+<script src="js/page1.js"></script>
+<script src="js/chrome.js"></script>
+</body>
+</html>

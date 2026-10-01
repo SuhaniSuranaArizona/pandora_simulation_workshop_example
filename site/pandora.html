@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pandora's trick</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+  <span class="brand">Stellar contamination and Pandora</span>
+  <nav aria-label="Pages"><ul>
+    <li><a href="index.html">1 The problem</a></li>
+    <li><a href="star.html">2 Play with the star</a></li>
+    <li><a href="pandora.html" aria-current="page">3 Pandora's trick</a></li>
+    <li><a href="about.html">4 About this model</a></li>
+  </ul></nav>
+  <button type="button" class="ghost proj" id="proj" aria-pressed="false">Projector view</button>
+</div></header>
+
+<main class="wrap" id="main">
+  <h1>Pandora's trick: let the visible light describe the star</h1>
+  <p class="lede">Pandora watches the star in visible light while it measures the infrared spectrum. As spots rotate in and out of view the visible brightness wobbles, and the size of that wobble says how spotted the star is. That tells us how much to correct the infrared spectrum. The catch is that a wobble only shows <em>change</em>, so turning it into an average needs an assumption. Try the three spot layouts below to see where it works and where it does not.</p>
+
+  <section class="card" aria-label="Controls">
+    <div class="ctrl-grid">
+      <div><span class="lab" id="layoutLab">The star's hidden spot layout</span>
+        <span class="seg" role="group" aria-labelledby="layoutLab">
+          <button type="button" data-layout="clustered" aria-pressed="false">Clustered</button>
+          <button type="button" data-layout="typical" aria-pressed="true">Typical</button>
+          <button type="button" data-layout="spread" aria-pressed="false">Spread</button>
+        </span></div>
+      <div><span class="lab" id="starLab">Star</span>
+        <span class="seg" role="group" aria-labelledby="starLab">
+          <button type="button" data-star="M" aria-pressed="true">M dwarf</button>
+          <button type="button" data-star="K" aria-pressed="false">K dwarf</button>
+        </span></div>
+      <div class="field"><label for="size">Spot size</label><output id="sizeOut"></output><input id="size" type="range" min="0.5" max="1.25" step="0.05" value="1"></div>
+      <div class="field"><label for="visits">Visits (24 h each)</label><output id="visitsOut"></output><input id="visits" type="range" min="1" max="10" step="1" value="6"></div>
+      <div class="field"><label for="noise">Noise</label><output id="noiseOut"></output><input id="noise" type="range" min="0.25" max="3" step="0.05" value="1"></div>
+      <div class="btn-row">
+        <button class="primary" type="button" id="fix" aria-pressed="false">Correct it</button>
+        <button class="ghost" type="button" id="reseed">New noise draw</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="stat-row" style="margin-top:16px" aria-live="polite">
+    <div class="stat"><div class="k">Measured spectrum is off by</div><div class="v" id="errBefore">–</div><div class="n" id="errBeforeN"></div></div>
+    <div class="stat"><div class="k">After the correction</div><div class="v" id="errAfter">–</div><div class="n" id="errAfterN">press Correct it</div></div>
+    <div class="stat"><div class="k">What the visible data say</div><div class="v" id="says">–</div><div class="n" id="saysN"></div></div>
+    <div class="stat"><div class="k">The hidden truth</div><div class="v" id="truth">–</div><div class="n" id="truthN"></div></div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <p class="chart-title">Visible channel: the star's brightness</p>
+      <p class="chart-sub">Hourly photometry in every visit, with the planet's transit masked. Dotted lines mark the transits.</p>
+      <canvas id="vis" class="chart" role="img" aria-label="Visible brightness of the star over the visits"></canvas>
+    </div>
+    <div class="card">
+      <p class="chart-title">Infrared channel: transit depth spectrum</p>
+      <p class="chart-sub">Average of all visits. The correction uses each visit's own stellar brightness at its transit.</p>
+      <canvas id="nir" class="chart" role="img" aria-label="Infrared transit depth spectrum: true, measured and corrected"></canvas>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h2>What to notice</h2>
+    <ol>
+      <li><strong>Typical</strong>: press <em>Correct it</em>. The measured spectrum sits too deep, and the corrected one lands on the truth, inside its shaded range.</li>
+      <li><strong>Clustered</strong> spots make the visible light wobble a lot for the amount of spottedness, so the method thinks the star is more spotted than it is and overcorrects. <strong>Spread</strong> spots nearly cancel out as the star turns, so the wobble is tiny and the method corrects almost nothing. In both cases the true κ in the “hidden truth” card falls outside the assumed range.</li>
+      <li>Watch the shaded range on the Spread star: it is narrow, yet it misses the truth. The range only reflects the assumption and the noise, so when the assumption is wrong the method is confidently wrong. More visits and lower noise tighten the fit but cannot cure that.</li>
+    </ol>
+    <details>
+      <summary>How the estimate works, and what it assumes</summary>
+      <p style="color:var(--muted);font-size:.93rem">Fit a sinusoid at the known rotation period to the visible data to get the modulation amplitude. Multiply it by a factor κ to estimate the star's average dimming at 0.6 µm, then use the known spot and star temperatures to scale that to each infrared wavelength and divide each transit by its ε.</p>
+      <p style="color:var(--muted);font-size:.93rem">κ is the assumption. It was calibrated on 1000 random stars with 2 to 5 circular spots, no faculae, and the spin axis edge-on: median κ = <span id="kMed"></span>, with 16 to 84 per cent of layouts between <span id="kLo"></span> and <span id="kHi"></span>. A layout unlike that sample breaks the estimate, which is what the Clustered and Spread buttons show. The spot temperature is taken as known, and faculae and spot evolution are left out.</p>
+    </details>
+  </div>
+
+  <p class="note">Illustrative model: blackbody spectra, round-number temperatures, a made-up planet, invented noise levels, and a made-up rotation period and visit plan. It is a simplified stand-in for a joint fit, not a forecast of Pandora's performance. The "typical" layout has all its spots in one hemisphere because the planet's path has to stay clear of spots on this page.</p>
+  <nav class="pager" aria-label="Previous and next page">
+    <a href="star.html" rel="prev">← 2 Play with the star</a>
+    <a href="about.html" rel="next">4 About this model →</a>
+  </nav>
+</main>
+<footer class="site"><div class="wrap">Transit light source effect explainer, conceptual version.</div></footer>
+
+<script src="js/model.js"></script>
+<script src="js/presets.js"></script>
+<script src="js/calibration.js"></script>
+<script src="js/correction.js"></script>
+<script src="js/scenario.js"></script>
+<script src="js/plots.js"></script>
+<script src="js/page3.js"></script>
+<script src="js/chrome.js"></script>
+</body>
+</html>

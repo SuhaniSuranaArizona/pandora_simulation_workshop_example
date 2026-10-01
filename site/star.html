@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Play with the star</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+  <span class="brand">Stellar contamination and Pandora</span>
+  <nav aria-label="Pages"><ul>
+    <li><a href="index.html">1 The problem</a></li>
+    <li><a href="star.html" aria-current="page">2 Play with the star</a></li>
+    <li><a href="pandora.html">3 Pandora's trick</a></li>
+    <li><a href="about.html">4 About this model</a></li>
+  </ul></nav>
+  <button type="button" class="ghost proj" id="proj" aria-pressed="false">Projector view</button>
+</div></header>
+
+<main class="wrap" id="main">
+  <h1>Play with the star</h1>
+  <p class="lede">Add, move and resize spots and faculae, then see how the measured transit spectrum drifts away from the true one. Cool spots are much dimmer than the star in visible light but only a little dimmer in the infrared, so the error depends on wavelength and tilts the whole spectrum.</p>
+
+  <div class="layout-2">
+    <aside class="side">
+      <section class="card">
+        <h2>Star and planet</h2>
+        <span class="seg" role="group" aria-label="Star type">
+          <button type="button" data-star="M" aria-pressed="true">M dwarf</button>
+          <button type="button" data-star="K" aria-pressed="false">K dwarf</button>
+        </span>
+        <div class="n" id="starBlurb" style="color:var(--muted);font-size:.85rem;margin-top:6px"></div>
+        <div class="field"><label for="rp">Planet size (Rp/Rs)</label><output id="rpOut"></output><input id="rp" type="range" min="0.03" max="0.12" step="0.005"></div>
+        <div class="field"><label for="b">Impact parameter</label><output id="bOut"></output><input id="b" type="range" min="0" max="0.7" step="0.01"></div>
+      </section>
+      <section class="card">
+        <h2>Spots and faculae</h2>
+        <div class="btn-row">
+          <button class="ghost" type="button" id="addSpot">+ Spot</button>
+          <button class="ghost" type="button" id="addFac">+ Faculae</button>
+        </div>
+        <div id="features"></div>
+        <div class="btn-row" style="margin-top:12px">
+          <button class="primary" type="button" id="inPath">Put a spot in the path</button>
+          <button class="ghost" type="button" id="reset">Reset</button>
+        </div>
+      </section>
+    </aside>
+
+    <div class="main">
+      <div class="stat-row" aria-live="polite">
+        <div class="stat"><div class="k">Depth error at 0.6 µm (visible)</div><div class="v" id="biasVis">–</div><div class="n" id="covVis"></div></div>
+        <div class="stat"><div class="k">Depth error at 1.3 µm (near-IR)</div><div class="v" id="biasNir">–</div><div class="n" id="covNir"></div></div>
+        <div class="stat"><div class="k">Planet's path</div><div class="v" id="path">–</div><div class="n" id="pathNote"></div></div>
+      </div>
+      <div class="row-top">
+        <div class="sky"><canvas id="star" width="241" height="241" role="img" aria-label="The star at mid-transit"></canvas></div>
+        <div class="card"><canvas id="spec" class="chart" role="img" aria-label="Transit depth versus wavelength, true and as measured"></canvas></div>
+      </div>
+      <div class="card"><canvas id="lc" class="chart" role="img" aria-label="Transit light curves at 0.6 and 1.3 micron"></canvas></div>
+      <details class="card">
+        <summary>The equation behind it</summary>
+        <p>When the planet's path is free of spots, the measured depth is the true depth times a correction ε that depends on wavelength:</p>
+        <div class="eq">ε(λ) = 1 / [ 1 − f_spot · (1 − S_spot/S_phot) − f_fac · (1 − S_fac/S_phot) ]</div>
+        <p style="color:var(--muted);font-size:.92rem">f is the share of the star's light that the spots or faculae take up. S is the brightness of each surface type at that wavelength. Put a spot in the planet's path and this simple formula no longer holds: the planet blocks the dim spot itself, and the dip gets shallower instead.</p>
+      </details>
+    </div>
+  </div>
+
+  <p class="note">Illustrative model: simplified stellar spectra (blackbodies), round-number temperatures, and a made-up planet. The Pandora bands are the mission's published ones (visible 0.4 to 0.7 µm, near-infrared 0.9 to 1.6 µm).</p>
+  <nav class="pager" aria-label="Previous and next page">
+    <a href="index.html" rel="prev">← 1 The problem</a>
+    <a href="pandora.html" rel="next">3 Pandora's trick →</a>
+  </nav>
+</main>
+<footer class="site"><div class="wrap">Transit light source effect explainer, conceptual version.</div></footer>
+
+<script src="js/model.js"></script>
+<script src="js/presets.js"></script>
+<script src="js/plots.js"></script>
+<script src="js/starview.js"></script>
+<script src="js/page2.js"></script>
+<script src="js/chrome.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About this model</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<header class="site"><div class="wrap">
+  <span class="brand">Stellar contamination and Pandora</span>
+  <nav aria-label="Pages"><ul>
+    <li><a href="index.html">1 The problem</a></li>
+    <li><a href="star.html">2 Play with the star</a></li>
+    <li><a href="pandora.html">3 Pandora's trick</a></li>
+    <li><a href="about.html" aria-current="page">4 About this model</a></li>
+  </ul></nav>
+  <button type="button" class="ghost proj" id="proj" aria-pressed="false">Projector view</button>
+</div></header>
+
+<main class="wrap" id="main">
+  <h1>About this model</h1>
+  <p class="lede">A teaching sketch of the transit light source effect and of how Pandora's simultaneous visible and infrared observations could help. It is built to show the idea, not to predict a real star, so this page says what is simplified, what was checked, and where the sketch stops being trustworthy.</p>
+
+  <section class="card" aria-labelledby="walk">
+    <h2 id="walk">Suggested walk-through for a group meeting (about 8 minutes)</h2>
+    <ol class="steps">
+      <li><span class="time">0:00 · Page 1, 1½ min.</span> Let the transit play. Drag <em>Spot size</em> from 0 up to about 1.5 and watch the solid curve pull away from the dashed one. The planet is identical in both; only the star changed.</li>
+      <li><span class="time">1:30 · Page 2, 2½ min.</span> Point at the spectrum: the error is larger in the visible than in the infrared, so the whole spectrum tilts. Press <em>Put a spot in the path</em> and the error flips sign, because the planet now blocks a dim spot. Switch M and K: with these presets the errors come out nearly the same.</li>
+      <li><span class="time">4:00 · Page 3, 3½ min.</span> Leave the layout on <em>Typical</em> and press <em>Correct it</em>: the corrected spectrum lands on the truth. Then try <em>Clustered</em> (overcorrects) and <em>Spread</em> (barely corrects, with a narrow range that misses). Finish by raising the visits and lowering the noise to show that they do not fix a wrong assumption.</li>
+      <li><span class="time">7:30 · This page, ½ min.</span> Close on what is simplified, below.</li>
+    </ol>
+    <p style="color:var(--muted);font-size:.93rem;margin-bottom:0">Tip: the <em>Projector view</em> button in the header enlarges text and charts.</p>
+  </section>
+
+  <section class="card" style="margin-top:16px" aria-labelledby="simple">
+    <h2 id="simple">What is simplified</h2>
+    <table class="plain">
+      <thead><tr><th scope="col">Piece</th><th scope="col">What the site does</th><th scope="col">What is left out</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Stellar spectra</th><td>Blackbodies at round-number temperatures: M dwarf 3500 K (spots 3100 K, faculae 3600 K), K dwarf 4500 K (spots 3900 K, faculae 4600 K).</td><td>Real M and K dwarfs have molecular bands and other structure that change the spot contrast with wavelength. These temperatures are not fits to any star.</td></tr>
+        <tr><th scope="row">Star surface</th><td>A pixelated disk with quadratic limb darkening that weakens toward the infrared, and circular spots and faculae that rotate with the star.</td><td>One temperature per feature type, no limb-dependent faculae contrast, no spot evolution, granulation or pulsation.</td></tr>
+        <tr><th scope="row">Planet</th><td>A made-up planet: Rp/Rs = 0.06 with a few water-like bands, on a circular 3-day orbit.</td><td>No real atmosphere model, no real system.</td></tr>
+        <tr><th scope="row">Pandora</th><td>Bands as published: visible photometry 0.4 to 0.7 µm and near-infrared spectroscopy 0.9 to 1.6 µm, observed together in 24-hour visits, up to 10 visits (Rotman et al. 2026).</td><td>No gaps in coverage (a low Earth orbit gives real visits gaps), no scheduling, and no instrument systematics. The infrared points are 0.025 µm apart, which is a plotting choice and not Pandora's resolution.</td></tr>
+        <tr><th scope="row">Noise</th><td>Invented Gaussian noise: 400 ppm per hourly visible point and 120 ppm per infrared point per visit, at a noise setting of 1.</td><td>Not a prediction of Pandora's precision.</td></tr>
+        <tr><th scope="row">Correction</th><td>A sinusoid fitted to the visible light curve, scaled by an assumed factor κ to the star's average dimming (page 3).</td><td>Not a joint fit. The spot temperature is taken as known, and faculae are absent from the page 3 star.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="cols" style="margin-top:16px">
+    <section class="card" aria-labelledby="eq">
+      <h2 id="eq">The main equation</h2>
+      <p>When the planet's path is free of spots, the measured depth is the true depth times a correction ε that depends on wavelength:</p>
+      <div class="eq">ε(λ) = 1 / [ 1 − f_spot · (1 − S_spot/S_phot) − f_fac · (1 − S_fac/S_phot) ]</div>
+      <p style="color:var(--muted);font-size:.93rem">f_spot and f_fac are the shares of the star's light taken up by spots and faculae. S is the brightness of spots, faculae and ordinary photosphere at that wavelength. Cool spots have S_spot well below S_phot, so ε is above 1 and the planet looks too big, most of all at the short wavelengths where the contrast is greatest.</p>
+      <p style="color:var(--muted);font-size:.93rem;margin-bottom:0">If the planet crosses a spot, this shortcut no longer applies. The planet blocks a dim patch, and the dip gets shallower. Page 2 shows that case.</p>
+    </section>
+    <section class="card" aria-labelledby="where">
+      <h2 id="where">Where the correction breaks</h2>
+      <p>A rotation light curve shows how the star's brightness <em>changes</em>. It does not show how spotted the star is on average, because spots spread evenly around the star hardly change the brightness at all. The page 3 method has to assume a link between the two, and the factor κ encodes it. It was calibrated on 1000 random layouts, and the middle two-thirds of them give κ between about 0.7 and 1.9. Clustered spots fall below that range and evenly spread spots far above it.</p>
+      <p style="margin-bottom:0">That limit is known in the literature: Rackham et al. (2018) found that a large range of spot and faculae covering fractions is consistent with the same variability, and that corrections assuming a linear relation between variability and coverage tend to underestimate the contamination. A full analysis would use more information than this sketch does.</p>
+    </section>
+  </div>
+
+  <div class="cols" style="margin-top:16px">
+    <section class="card" aria-labelledby="checked">
+      <h2 id="checked">What was checked</h2>
+      <ul>
+        <li>With no spots, the transit light curve matches the batman package to about 1 ppm, for depths from 2,500 to 22,500 ppm.</li>
+        <li>With spots kept off the planet's path, the pixel model's depth equals the true depth times the analytic ε, to machine precision.</li>
+        <li>The browser code reproduces the Python reference model to about 1e-16 on four saved cases, including an occulted spot and a tilted spin axis.</li>
+        <li>The browser's κ for three named layouts agrees with the Python calibration to three digits.</li>
+        <li>The page 3 method removes the bias for a typical layout, and fails in the documented ways for clustered and spread layouts.</li>
+      </ul>
+    </section>
+    <section class="card" aria-labelledby="notchecked">
+      <h2 id="notchecked">What was not checked</h2>
+      <ul>
+        <li>Realistic stellar atmosphere spectra. Everything here uses blackbodies.</li>
+        <li>Any comparison with real Pandora data or a full simulation of its performance.</li>
+        <li>Whether the conclusions hold for real spot distributions, which the random-layout prior only approximates.</li>
+        <li>Review by a domain expert, and a cold read by someone who has not seen the site before.</li>
+      </ul>
+    </section>
+  </div>
+
+  <section class="card" style="margin-top:16px" aria-labelledby="refs">
+    <h2 id="refs">References</h2>
+    <ul class="refs">
+      <li>Rackham, B. V., Apai, D., &amp; Giampapa, M. S. 2018, “The Transit Light Source Effect: False Spectral Features and Incorrect Densities for M-dwarf Transiting Planets,” ApJ 853, 122. <a href="https://iopscience.iop.org/article/10.3847/1538-4357/aaa08c" rel="noopener">doi:10.3847/1538-4357/aaa08c</a></li>
+      <li>Rotman, Y., McGill, P., Welbanks, L., Rackham, B. V., et al. 2026, “NASA's Pandora SmallSat Mission: Simulated Modeling and Retrieval of Near-Infrared Exoplanet Transmission Spectra,” arXiv:2603.04488. <a href="https://arxiv.org/abs/2603.04488" rel="noopener">arxiv.org/abs/2603.04488</a> (source of the Pandora bands, visit length and target plan)</li>
+      <li>Quintana, E. V., et al. 2021, “The Pandora SmallSat: Multiwavelength Characterization of Exoplanets and their Host Stars,” arXiv:2108.06438. <a href="https://arxiv.org/abs/2108.06438" rel="noopener">arxiv.org/abs/2108.06438</a></li>
+      <li>Kreidberg, L. 2015, “batman: BAsic Transit Model cAlculatioN in Python,” PASP 127, 1161. <a href="https://arxiv.org/abs/1507.08285" rel="noopener">arxiv.org/abs/1507.08285</a> (used to check the no-spot light curve)</li>
+    </ul>
+  </section>
+
+  <nav class="pager" aria-label="Previous and next page">
+    <a href="pandora.html" rel="prev">← 3 Pandora's trick</a>
+    <a href="index.html">Back to the start →</a>
+  </nav>
+</main>
+<footer class="site"><div class="wrap">Transit light source effect explainer, conceptual version. Illustrative model, not a forecast for any real star.</div></footer>
+<script src="js/chrome.js"></script>
+</body>
+</html>
